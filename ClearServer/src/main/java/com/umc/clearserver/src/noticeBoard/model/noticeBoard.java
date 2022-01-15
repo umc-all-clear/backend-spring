@@ -1,6 +1,7 @@
 package com.umc.clearserver.src.noticeBoard.model;
 import java.sql.Timestamp;
-import java.time.Localdatetime;
+import java.time.LocalDate;
+
 import lombok.*;
 
 @Getter // 해당 클래스에 대한 접근자 생성
@@ -17,6 +18,6 @@ public class noticeBoard{
     private float score;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private LocalDatetime cleanedAt;
+    private LocalDate cleanedAt;
     private boolean isWaited;
 }
