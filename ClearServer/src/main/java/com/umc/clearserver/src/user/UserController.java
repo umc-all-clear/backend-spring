@@ -2,19 +2,9 @@ package com.umc.clearserver.src.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.umc.clearserver.config.BaseException;
-import com.umc.clearserver.config.BaseResponse;
-import com.umc.clearserver.src.user.model.*;
-import com.umc.clearserver.utils.JwtService;
+import com.umc.clearserver.src.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.umc.clearserver.config.BaseResponseStatus.*;
-import static com.umc.clearserver.utils.ValidationRegex.isRegexEmail;
 
 @RestController // Rest API 또는 WebAPI를 개발하기 위한 어노테이션. @Controller + @ResponseBody 를 합친것.
                 // @Controller      [Presentation Layer에서 Contoller를 명시하기 위해 사용]

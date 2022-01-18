@@ -21,11 +21,15 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// lombok관련 설정
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.projectlombok:lombok'
 	// Security, Authentication
 	implementation('org.springframework.boot:spring-boot-starter-security')
 	implementation(group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0')
@@ -33,6 +37,13 @@ dependencies {
 
 	implementation('org.springframework.boot:spring-boot-starter')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+
+	//S3, AWS접근
+	implementation platform('software.amazon.awssdk:bom:2.15.0')
+	implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
+	implementation ('com.amazonaws:aws-java-sdk-s3')
+	implementation ('software.amazon.awssdk:s3control')
+	implementation ('org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE')
 }
 
 test {

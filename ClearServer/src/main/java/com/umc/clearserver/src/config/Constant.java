@@ -1,4 +1,4 @@
-package com.umc.clearserver.config;
+package com.umc.clearserver.src.config;
 
 // 프로젝트에서 공통적으로 사용하는 상수들
 public class Constant {

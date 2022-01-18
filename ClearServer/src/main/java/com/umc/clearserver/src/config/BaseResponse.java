@@ -1,4 +1,4 @@
-package com.umc.clearserver.config;
+package com.umc.clearserver.src.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
