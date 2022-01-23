@@ -12,13 +12,15 @@ public class NoticeBoardController {
 
     private final AwsS3Service awsS3Service;
 
-    @PostMapping("/images")
+    /**
+     * 게시판에 Before, After 사진 게시하고 평가 대기하기
+     * @param multipartFile
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/noticeboard/offering")
     public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
         awsS3Service.upload(multipartFile, "static");
         return "test";
-    }
-    @GetMapping("/images")
-    public String testConnection(){
-        return "hellow World!";
     }
 }
