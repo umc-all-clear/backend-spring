@@ -13,3 +13,5 @@ new_user_credentials.csv
 ClearServer/src/main/java/com/umc/clearserver/src/utils/AES128.java
 
 ClearServer/src/main/java/com/umc/clearserver/src/utils/JwtService.java
+
+ClearServer/src/main/resources/application.yml
