@@ -19,8 +19,9 @@ public class NoticeBoardController {
      * @throws IOException
      */
     @PostMapping("/noticeboard/offering")
-    public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
-        awsS3Service.upload(multipartFile, "static");
+    public String upload(@RequestParam("beforePic") MultipartFile multipartFile1, @RequestParam("afterPic") MultipartFile multipartFile2) throws IOException {
+        String beforeImgUrl = awsS3Service.upload(multipartFile1, "static");
+        String afterImgUrl = awsS3Service.upload(multipartFile2, "static");
         return "test";
     }
 }
