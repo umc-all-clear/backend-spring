@@ -1,5 +1,7 @@
 package com.umc.clearserver.src.user;
 
+import com.umc.clearserver.src.user.model.User;
+import com.umc.clearserver.src.user.model.PostLoginReq;
 import com.umc.clearserver.src.user.model.PostSignUpReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,7 +69,7 @@ public class UserDao {
 
     // 이메일 확인
     public int checkEmail(String email) {
-        String checkEmailQuery = "select exists(select email from User where email = ?)"; // User Table에 해당 email 값을 갖는 유저 정보가 존재하는가?
+        String checkEmailQuery = "select exists(select email from user where email = ?)"; // User Table에 해당 email 값을 갖는 유저 정보가 존재하는가?
         String checkEmailParams = email; // 해당(확인할) 이메일 값
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
@@ -84,23 +86,23 @@ public class UserDao {
 //
 //
 //    // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
-//    public User getPwd(PostLoginReq postLoginReq) {
-//        String getPwdQuery = "select * from User where email = ?"; // 해당 email을 만족하는 User의 정보들을 조회한다.
-//        String getPwdParams = postLoginReq.getEmail(); // 주입될 email값을 클라이언트의 요청에서 주어진 정보를 통해 가져온다.
-//
-//        return this.jdbcTemplate.queryForObject(getPwdQuery,
-//                (rs, rowNum) -> new User(
-//                        rs.getInt("id"),
-//                        rs.getString("email"),
-//                        rs.getString("password"),
-//                        rs.getString("nickname"),
-//                        rs.getTimestamp("createdAt"),
-//                        rs.getTimestamp("updatedAt"),
-//                        rs.getBoolean("state")
-//                ), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-//                getPwdParams
-//        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
-//    }
+    public User getPwd(PostLoginReq postLoginReq) {
+        String getPwdQuery = "select * from user where email = ?"; // 해당 email을 만족하는 User의 정보들을 조회한다.
+        String getPwdParams = postLoginReq.getEmail(); // 주입될 email값을 클라이언트의 요청에서 주어진 정보를 통해 가져온다.
+
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs, rowNum) -> new User(
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("nickname"),
+                        rs.getTimestamp("createdAt"),
+                        rs.getTimestamp("updatedAt"),
+                        rs.getBoolean("state")
+                ), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+                getPwdParams
+        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+    }
 //
 //    // User 테이블에 존재하는 전체 유저들의 정보 조회
 //    public List<GetUserRes> getUsers() {

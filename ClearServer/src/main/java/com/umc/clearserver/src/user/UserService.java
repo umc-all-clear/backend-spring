@@ -35,7 +35,7 @@ public class UserService {
     // ******************************************************************************
     // 회원가입(POST)
     public PostSignUpRes createUser(PostSignUpReq postSignUpReq) throws BaseException {
-        // 중복 확인: 해당 이메일을 가진 유저가 있는지 확인합니다. 중복될 경우, 에러 메시지를 보냅니다.
+        System.out.println("heellloo");
         if (userProvider.checkEmail(postSignUpReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
@@ -48,12 +48,17 @@ public class UserService {
         } catch (Exception ignored) { // 암호화가 실패하였을 경우 에러 발생
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
+        System.out.println(pwd);
         try {
             int userIdx = userDao.createUser(postSignUpReq);
+            System.out.println(userIdx);
             //jwt 발급.
             String jwt = jwtService.createJwt(userIdx);
+            System.out.println(jwt);
             String email = postSignUpReq.getEmail();
+            System.out.println(email);
             String nickname = postSignUpReq.getNickname();
+            System.out.println(nickname);
             return new PostSignUpRes(userIdx, email, nickname, jwt);
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
             throw new BaseException(DATABASE_ERROR);

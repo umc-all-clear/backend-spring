@@ -12,7 +12,7 @@ import lombok.Setter;
  * 로그인의 결과(Respone)를 보여주는 데이터의 형태
  */
 public class PostLoginRes {
-    private int userIdx;
+    private int id;
     private String jwt;
     private boolean state;
 }

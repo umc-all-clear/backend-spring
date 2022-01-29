@@ -17,7 +17,7 @@ import static com.umc.clearserver.src.utils.ValidationRegex.isRegexEmail;
                 //  [Presentation Layer?] 클라이언트와 최초로 만나는 곳으로 데이터 입출력이 발생하는 곳
                 //  Web MVC 코드에 사용되는 어노테이션. @RequestMapping 어노테이션을 해당 어노테이션 밑에서만 사용할 수 있다.
                 // @ResponseBody    모든 method의 return object를 적절한 형태로 변환 후, HTTP Response Body에 담아 반환.
-@RequestMapping("/app/users")
+@RequestMapping("/users")
 // method가 어떤 HTTP 요청을 처리할 것인가를 작성한다.
 // 요청에 대해 어떤 Controller, 어떤 메소드가 처리할지를 맵핑하기 위한 어노테이션
 // URL(/app/users)을 컨트롤러의 메서드와 매핑할 때 사용
@@ -131,27 +131,28 @@ public class UserController {
      * 로그인 API
      * [POST] /users/logIn
      */
-//    @ResponseBody
-//    @PostMapping("/log-in")
-//    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
-//        try {
-//            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
-//            if (postLoginReq.getEmail() == null)
-//            {// 이메일이 NULL값인지 확인
-//                return new BaseResponse<>(FAILED_TO_LOGIN_CAUSED_BY_EMAIL);
-//            }
-//            if (!isRegexEmail(postLoginReq.getEmail()))
-//            {//이메일 형식이 맞는지 확인
-//                return new BaseResponse<>(FAILED_TO_LOGIN_CAUSED_BY_EMAIL);
-//            }
-//            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
-//            PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
-//            if(postLoginRes.getUserStatus().equals("A"))return new BaseResponse<>(postLoginRes);
-//            else  return new BaseResponse<>(USERS_SATUS_NOT_ACTIVATED);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
+    @ResponseBody
+    @PostMapping("/log-in")
+    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
+        try {
+            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
+            if (postLoginReq.getEmail() == null)
+            {// 이메일이 NULL값인지 확인
+                return new BaseResponse<>(FAILED_TO_LOGIN_CAUSED_BY_EMAIL);
+            }
+            if (!isRegexEmail(postLoginReq.getEmail()))
+            {//이메일 형식이 맞는지 확인
+                return new BaseResponse<>(FAILED_TO_LOGIN_CAUSED_BY_EMAIL);
+            }
+            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+            PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
+            System.out.println();
+            if(postLoginRes.isState())return new BaseResponse<>(postLoginRes);
+            else  return new BaseResponse<>(USERS_STATUS_NOT_ACTIVATED);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
     /**
      * 모든 회원들의  조회 API
      * [GET] /users
