@@ -15,15 +15,21 @@ import java.util.Locale;
 
 @Repository
 public class NoticeBoardDao {
-    private JdbcTemplate jdbcTemplate;
+    private static JdbcTemplate jdbcTemplate;
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public static PostNoticeBoardRes postToNoticeBoard(PostNoticeBoardReq postNoticeBoardReq){
-        String postToBoardQuery = "";
-        PostNoticeBoardRes postNoticeBoardRes = null;
-        return null;
+    public PostNoticeBoardRes postNoticeBoardRes(String beforePicUrl, String afterPicUrl, String userID){
+        String getUserIdQuery = "SELECT id from user where email=?";
+        String userEmail = userID;
+        int ID = this.jdbcTemplate.queryForObject(getUserIdQuery, int.class, userEmail);
+        String insertNoticeBoardQuery = "INSERT INTO noticeBoard(beforePic, afterPic, writer, isWaited) VALUES(?, ?, ? ,?)";
+        Object[] insertNoticeBoardParams = new Object[]{beforePicUrl, afterPicUrl, ID, 0};
+        int result = this.jdbcTemplate.update(insertNoticeBoardQuery, insertNoticeBoardParams);
+
+        if(result == 0) return new PostNoticeBoardRes("Failed", -1, "err", "err", "err", true);
+        else return new PostNoticeBoardRes("Success", ID, userEmail, beforePicUrl, afterPicUrl, true);
     }
 }

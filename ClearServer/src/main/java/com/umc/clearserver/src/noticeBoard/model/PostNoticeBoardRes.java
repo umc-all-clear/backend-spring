@@ -9,8 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor // 해당 클래스의 모든 멤버 변수(userIdx, jwt)를 받는 생성자를 생성
 
 public class PostNoticeBoardRes {
-    private int id;
-    private int writer;
-    private String writerId;
+    private String queryResult;
+    private int writerID;
+    private String writerEmail;
+    private String beforePicUrl;
+    private String afterPicUrl;
     private boolean isWaited;
 }

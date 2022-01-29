@@ -10,6 +10,4 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class PostNoticeBoardReq {
     private String userEmail;
-    private MultipartFile beforePic;
-    private MultipartFile afterPic;
 }
