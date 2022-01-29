@@ -1,5 +1,5 @@
 //package com.example.demo.config
-package com.umc.clearserver.config;
+package com.umc.clearserver.src.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

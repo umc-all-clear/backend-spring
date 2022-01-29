@@ -1,4 +1,4 @@
-package com.umc.clearserver.config;
+package com.umc.clearserver.src.config;
 
 import lombok.Getter;
 
@@ -24,7 +24,8 @@ public enum BaseResponseStatus {
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
-    USERS_SATUS_NOT_ACTIVATED(false,2011,"활성화된 유저가 아닙니다."),
+    USERS_STATUS_NOT_ACTIVATED(false,2011,"활성화된 유저가 아닙니다."),
+    USERS_EMPTY_USER_EMAIL(false, 2012, "유저 이메일 값을 확인해주세요"),
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),

@@ -1,4 +1,4 @@
-package com.umc.clearserver.config;
+package com.umc.clearserver.src.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.umc.clearserver.src.config.BaseResponseStatus.SUCCESS;
 @Getter
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
@@ -19,9 +20,9 @@ public class BaseResponse<T> {//BaseResponse 객체를 사용할때 성공, 실�
 
     // 요청에 성공한 경우
     public BaseResponse(T result) {
-        this.isSuccess = BaseResponseStatus.SUCCESS.isSuccess();
-        this.message = BaseResponseStatus.SUCCESS.getMessage();
-        this.code = BaseResponseStatus.SUCCESS.getCode();
+        this.isSuccess = SUCCESS.isSuccess();
+        this.message = SUCCESS.getMessage();
+        this.code = SUCCESS.getCode();
         this.result = result;
     }
 
