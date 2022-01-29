@@ -1,12 +1,12 @@
 package com.umc.clearserver.src.user;
 
-import com.umc.clearserver.config.BaseException;
-import com.umc.clearserver.utils.JwtService;
+import com.umc.clearserver.src.config.BaseException;
+import com.umc.clearserver.src.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import static com.umc.clearserver.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.umc.clearserver.src.config.BaseResponseStatus.DATABASE_ERROR;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service    // [Business Layer에서 Service를 명시하기 위해서 사용] 비즈니스 로직이나 respository layer 호출하는 함수에 사용된다.
@@ -129,6 +129,4 @@ public class UserProvider {
     //++++++++++++++++++++++++++++++++++++++++++++++
     //김영진님의 영역 끝!
     //++++++++++++++++++++++++++++++++++++++++++++++
-
-
 }

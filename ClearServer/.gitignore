@@ -40,3 +40,5 @@ out/
 application.properties
 
 secret/
+
+.idea/

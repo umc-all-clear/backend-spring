@@ -1,7 +1,10 @@
 package com.umc.clearserver.src.noticeBoard;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,5 +69,24 @@ public class AwsS3Service {
         }
 
         return Optional.empty();
+    }
+
+    //s3파일 지우기
+    public String deleteFile(String bucket, String fileName) {
+        log.info("delete imageFile");
+        try {
+            //Delete 객체 생성
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, fileName);
+            //Delete
+            this.amazonS3Client.deleteObject(deleteObjectRequest);
+            System.out.println(String.format("[%s] deletion complete", fileName));
+            return fileName;
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+            return "Err: deleting File";
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+            return "Err: deleting File";
+        }
     }
 }

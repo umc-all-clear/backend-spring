@@ -3,19 +3,20 @@ package com.umc.clearserver.src.noticeBoard;
 import com.umc.clearserver.src.noticeBoard.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
-import java.util.Locale;
 
 @Repository
 public class NoticeBoardDao {
     private static JdbcTemplate jdbcTemplate;
+    private final AwsS3Service awsS3Service;
+
+    public NoticeBoardDao(AwsS3Service awsS3Service) {
+        this.awsS3Service = awsS3Service;
+    }
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -56,5 +57,20 @@ public class NoticeBoardDao {
                         rs.getString("beforePic"),
                         rs.getString("afterPic")
                 ));
+    }
+
+    public DeleteNoticeBoardRes deleteNoticeBoard(int idx, String email){
+//        String getBeforPicQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where id=?", idx);
+//        System.out.println(searchClearNoticeBoardRes.get(0).getAfterPicUrl());
+        String deleteBeforeFileName = awsS3Service.deleteFile("moduClear", "testUser/72330858-8be6-4c81-a5a1-cdc28fc61e63쌀국수.jpeg");
+        String deleteAfterFileName = awsS3Service.deleteFile("moduClear", "testUser/b8011852-2ddd-4f3b-a163-913a71b24ab2kitty.jpeg");
+        String deleteQuery ="DELETE from noticeBoard where id = ?;";
+        int res = this.jdbcTemplate.update(deleteQuery, idx);
+        if(res==1){
+            return new DeleteNoticeBoardRes("failed", -1, "null", "null");
+        }
+        else{
+            return new DeleteNoticeBoardRes("failed", -1, "null", "null");
+        }
     }
 }

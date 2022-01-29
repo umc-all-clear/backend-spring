@@ -51,5 +51,17 @@ public class NoticeBoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
+    /**
+     * 특정 게시물 삭제하기
+     * [Delete] /noticeboard/user?deletePostIndex=
+     */
+    @DeleteMapping("/noticeboard/user")
+    public BaseResponse<DeleteNoticeBoardRes> deleteNoticeBoard(@RequestParam(required = true) int deletePostIndex, String email){
+        try{
+            DeleteNoticeBoardRes deleteNoticeBoardRes = NoticeBoardService.deleteNoticeBoard(deletePostIndex, email);
+            return new BaseResponse<>(deleteNoticeBoardRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
