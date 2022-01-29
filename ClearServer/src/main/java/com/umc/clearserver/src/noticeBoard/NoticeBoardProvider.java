@@ -8,26 +8,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 
 @Service
 
-public class NoticeBoardService {
-    private NoticeBoardDao noticeBoardDao;
+public class NoticeBoardProvider {
+    private static NoticeBoardDao noticeBoardDao;
     final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public NoticeBoardService(NoticeBoardDao noticeBoardDao)
+    public NoticeBoardProvider(NoticeBoardDao noticeBoardDao)
     {
         this.noticeBoardDao = noticeBoardDao;
     }
 
-    public PostNoticeBoardRes postToNoticeBoard(String beforePicUrl, String afterPicUrl, String userID) throws BaseException {
+    public static List<SearchClearNoticeBoardRes> viewNoticeBoard(SearchClearNoticeBoardReq searchClearNoticeBoardReq, String email) throws BaseException{
         try{
-            PostNoticeBoardRes postNoticeBoardRes = noticeBoardDao.postNoticeBoardRes(beforePicUrl, afterPicUrl, userID);
-            return postNoticeBoardRes;
-        } catch (Exception exception){
+            List<SearchClearNoticeBoardRes> searchClearNoticeBoardRes = noticeBoardDao.viewNoticeBoard(searchClearNoticeBoardReq, email);
+            return searchClearNoticeBoardRes;
+        }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
-
 }

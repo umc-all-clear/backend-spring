@@ -2,14 +2,14 @@ package com.umc.clearserver.src.noticeBoard;
 
 import com.umc.clearserver.src.config.BaseException;
 import com.umc.clearserver.src.config.BaseResponse;
-import com.umc.clearserver.src.noticeBoard.model.PostNoticeBoardReq;
-import com.umc.clearserver.src.noticeBoard.model.PostNoticeBoardRes;
+import com.umc.clearserver.src.noticeBoard.model.*;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -37,6 +37,19 @@ public class NoticeBoardController {
         } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
-
     }
+    /**
+     * 특정 유저의 특정 날짜 청소시간 확인하기
+     * [POST] /noticeboard/user?email=
+     */
+    @PostMapping("/noticeboard/user")
+    public BaseResponse<List<SearchClearNoticeBoardRes>> viewNoticeBoard(@RequestBody SearchClearNoticeBoardReq searchClearNoticeBoardReq, @RequestParam(required = true) String email){
+        try{
+            List<SearchClearNoticeBoardRes> searchClearNoticeBoardRes = NoticeBoardProvider.viewNoticeBoard(searchClearNoticeBoardReq, email);
+            return new BaseResponse<>(searchClearNoticeBoardRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }

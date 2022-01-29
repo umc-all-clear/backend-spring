@@ -32,4 +32,29 @@ public class NoticeBoardDao {
         if(result == 0) return new PostNoticeBoardRes("Failed", -1, "err", "err", "err", true);
         else return new PostNoticeBoardRes("Success", ID, userEmail, beforePicUrl, afterPicUrl, true);
     }
+
+    public List<SearchClearNoticeBoardRes> viewNoticeBoard(SearchClearNoticeBoardReq searchClearNoticeBoardReq, String email){
+        String getUserIdQuery = "SELECT id from user where email=?";
+        String historyTime = "\'" +searchClearNoticeBoardReq.getYear()+"-" + searchClearNoticeBoardReq.getMonth() + "-" + searchClearNoticeBoardReq.getDay() +" "+23+":"+59+":00\'";
+
+        String userEmail = email;
+        int ID = this.jdbcTemplate.queryForObject(getUserIdQuery, int.class, userEmail);
+
+        String getNoticeBoardQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where writer = %d AND createdAt < %s", ID, historyTime);
+        //Object[] getNoticeBoardQueryParam = new Object[]{ID, historyTime};
+        System.out.println("=======================");
+        System.out.println("유저 " + email + "의 " + historyTime+"이전 게시물을 조회합니다.");
+        System.out.println("Executed Query: "+getNoticeBoardQuery);
+        System.out.println("=======================");
+        return this.jdbcTemplate.query(getNoticeBoardQuery,
+                (rs, rowNum) -> new SearchClearNoticeBoardRes(
+                        rs.getInt("id"),
+                        userEmail,
+                        rs.getDouble("score"),
+                        rs.getString("contents"),
+                        rs.getString("comments"),
+                        rs.getString("beforePic"),
+                        rs.getString("afterPic")
+                ));
+    }
 }
