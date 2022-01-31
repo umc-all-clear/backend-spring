@@ -60,17 +60,44 @@ public class NoticeBoardDao {
     }
 
     public DeleteNoticeBoardRes deleteNoticeBoard(int idx, String email){
-//        String getBeforPicQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where id=?", idx);
-//        System.out.println(searchClearNoticeBoardRes.get(0).getAfterPicUrl());
-        String deleteBeforeFileName = awsS3Service.deleteFile("moduclear", "testUser/2e076100-cff9-43cf-9397-2d41248e0981kitty.jpeg");
-        String deleteAfterFileName = awsS3Service.deleteFile("moduclear", "testUser/9d773de6-b4fc-49d5-be5c-0e03e0c6bb41쌀국수.jpeg");
+        String beforePicFileName = null, afterPicFileName = null;
+        String getBeforPicQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where id=?", idx);
+        SearchClearNoticeBoardRes searchClearNoticeBoardRes;
+        searchClearNoticeBoardRes = this.jdbcTemplate.queryForObject(getBeforPicQuery,
+                (rs, rowNum) -> new SearchClearNoticeBoardRes(
+                        rs.getInt("id"),
+                        email,
+                        rs.getDouble("score"),
+                        rs.getString("contents"),
+                        rs.getString("comments"),
+                        rs.getString("beforePic"),
+                        rs.getString("afterPic")
+                ), idx);
+
+        String[] beforeUrlSplit = searchClearNoticeBoardRes.getBeforePicUrl().split("/");
+        String[] afterUrlSplit = searchClearNoticeBoardRes.getAfterPicUrl().split("/");
+        for(int i=0; i< beforeUrlSplit.length; i++)
+        {
+            if(beforeUrlSplit[i].equals(email)) beforePicFileName = beforeUrlSplit[i+1];
+        }
+        for(int i=0; i< afterUrlSplit.length; i++)
+        {
+            if(afterUrlSplit[i].equals(email)) afterPicFileName = afterUrlSplit[i+1];
+        }
+        System.out.println(beforePicFileName);
+        System.out.println(afterPicFileName);
+        String deleteBeforeFileName = awsS3Service.deleteFile("moduclear", email+"/"+beforePicFileName);
+        String deleteAfterFileName = awsS3Service.deleteFile("moduclear", email+"/"+afterPicFileName);
+        int res = 1;
         String deleteQuery ="DELETE from noticeBoard where id = ?;";
-        int res = this.jdbcTemplate.update(deleteQuery, idx);
+        //int res = this.jdbcTemplate.update(deleteQuery, idx);
         if(res==1){
-            return new DeleteNoticeBoardRes("failed", -1, "null", "null");
+            return new DeleteNoticeBoardRes("success", idx, deleteBeforeFileName, deleteAfterFileName);
         }
         else{
             return new DeleteNoticeBoardRes("failed", -1, "null", "null");
         }
+
     }
+
 }
