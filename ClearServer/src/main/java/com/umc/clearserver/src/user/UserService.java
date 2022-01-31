@@ -35,10 +35,12 @@ public class UserService {
     // ******************************************************************************
     // 회원가입(POST)
     public PostSignUpRes createUser(PostSignUpReq postSignUpReq) throws BaseException {
-        System.out.println("heellloo");
+        // 중복 확인: 해당 이메일을 가진 유저가 있는지 확인합니다. 중복될 경우, 에러 메시지를 보냅니다.
+        System.out.println(userProvider.checkEmail(postSignUpReq.getEmail()));
         if (userProvider.checkEmail(postSignUpReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
+
         String pwd;
         try {
             // 암호화: postUserReq에서 제공받은 비밀번호를 보안을 위해 암호화시켜 DB에 저장합니다.

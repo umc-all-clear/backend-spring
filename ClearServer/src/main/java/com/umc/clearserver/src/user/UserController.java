@@ -91,8 +91,8 @@ public class UserController {
         }
 
         try {
-            PostSignUpRes PostSignUpRes = userService.createUser(postSignUpReq); //  회원가입 -> 생성 -> service
-            return new BaseResponse<>(PostSignUpRes);
+            PostSignUpRes postSignUpRes = userService.createUser(postSignUpReq); //  회원가입 -> 생성 -> service
+            return new BaseResponse<>(postSignUpRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

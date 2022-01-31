@@ -62,8 +62,8 @@ public class NoticeBoardDao {
     public DeleteNoticeBoardRes deleteNoticeBoard(int idx, String email){
 //        String getBeforPicQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where id=?", idx);
 //        System.out.println(searchClearNoticeBoardRes.get(0).getAfterPicUrl());
-        String deleteBeforeFileName = awsS3Service.deleteFile("moduClear", "testUser/72330858-8be6-4c81-a5a1-cdc28fc61e63쌀국수.jpeg");
-        String deleteAfterFileName = awsS3Service.deleteFile("moduClear", "testUser/b8011852-2ddd-4f3b-a163-913a71b24ab2kitty.jpeg");
+        String deleteBeforeFileName = awsS3Service.deleteFile("moduclear", "testUser/2e076100-cff9-43cf-9397-2d41248e0981kitty.jpeg");
+        String deleteAfterFileName = awsS3Service.deleteFile("moduclear", "testUser/9d773de6-b4fc-49d5-be5c-0e03e0c6bb41쌀국수.jpeg");
         String deleteQuery ="DELETE from noticeBoard where id = ?;";
         int res = this.jdbcTemplate.update(deleteQuery, idx);
         if(res==1){
