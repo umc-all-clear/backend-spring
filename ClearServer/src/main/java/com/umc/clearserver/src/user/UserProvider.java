@@ -52,8 +52,9 @@ public class UserProvider {
         if (postLoginReq.getPassword().equals(password)) { //비말번호가 일치한다면 userIdx를 가져온다.
             int userIdx = userDao.getPwd(postLoginReq).getId();
             Boolean userStatus = userDao.getPwd(postLoginReq).isState();
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostLoginRes(userIdx, jwt, userStatus);
+            String email = userDao.getPwd(postLoginReq).getEmail();
+            String nickname = userDao.getPwd(postLoginReq).getNickname();
+            return new PostLoginRes(userIdx, email, nickname, userStatus);
 
         } else { // 비밀번호가 다르다면 에러메세지를 출력한다.
             throw new BaseException(FAILED_TO_LOGIN);

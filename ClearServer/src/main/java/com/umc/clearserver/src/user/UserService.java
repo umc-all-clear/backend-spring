@@ -35,8 +35,11 @@ public class UserService {
     // ******************************************************************************
     // 회원가입(POST)
     public PostSignUpRes createUser(PostSignUpReq postSignUpReq) throws BaseException {
+<<<<<<< Updated upstream
         // 중복 확인: 해당 이메일을 가진 유저가 있는지 확인합니다. 중복될 경우, 에러 메시지를 보냅니다.
         System.out.println(userProvider.checkEmail(postSignUpReq.getEmail()));
+=======
+>>>>>>> Stashed changes
         if (userProvider.checkEmail(postSignUpReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
@@ -56,11 +59,8 @@ public class UserService {
             System.out.println(userIdx);
             //jwt 발급.
             String jwt = jwtService.createJwt(userIdx);
-            System.out.println(jwt);
             String email = postSignUpReq.getEmail();
-            System.out.println(email);
             String nickname = postSignUpReq.getNickname();
-            System.out.println(nickname);
             return new PostSignUpRes(userIdx, email, nickname, jwt);
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
             throw new BaseException(DATABASE_ERROR);
@@ -93,7 +93,29 @@ public class UserService {
 //    }
 //
 //    //해당 email을 갖는 User의 정보 삭제
-//    public int deleteUserByEmail(String userEmail) throws BaseException{
+//    public int deleteUserByEmail(LeaveOutReq leaveOutReq) throws BaseException{
+//        // 회원 조회
+//        int userId;
+//        try{
+//            userId = userDao.getUsersById(leaveOutReq.getEmail());
+//            System.out.println(userId);
+//        }
+//        catch (Exception exception){
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//        // 회원 jwt랑 받은 jwt와 비교
+//        String jwt = leaveOutReq.getJwt();
+//        try {
+//            if (jwtService.getUserIdx() == userId){
+//
+//            }
+//        }
+//        catch (Exception exception){
+//            throw new BaseException(INVALID_JWT)
+//        }
+//        if (userProvider.checkEmail(postSignUpReq.getEmail()) == 1) {
+//            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+//        }
 //        try {
 //            int deleteUserRes = userDao.deleteUserByEmail(userEmail);
 //            return deleteUserRes;
