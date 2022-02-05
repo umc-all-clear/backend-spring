@@ -1,8 +1,8 @@
 package com.umc.clearserver.src.user;
 
-import com.umc.clearserver.src.user.model.User;
 import com.umc.clearserver.src.user.model.PostLoginReq;
 import com.umc.clearserver.src.user.model.PostSignUpReq;
+import com.umc.clearserver.src.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -59,10 +59,8 @@ public class UserDao {
     // 회원가입
     public int createUser(PostSignUpReq postSignUpReq) {
         String createUserQuery = "insert into user(email, password, nickname) VALUES(?,?,?)"; // 실행될 동적 쿼리문
-        System.out.println("이까지 ㅇㅋ");
         Object[] createUserParams = new Object[]{postSignUpReq.getEmail(), postSignUpReq.getPassword1(), postSignUpReq.getNickname()}; // 동적 쿼리의 ?부분에 주입될 값
         this.jdbcTemplate.update(createUserQuery, createUserParams);
-        System.out.println("이까지 ㅇㅋ");
         String lastInsertIdQuery = "select last_insert_id()"; // 가장 마지막에 삽입된(생성된) id값은 가져온다.
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 유저의 userIdx번호를 반환한다.
     }
@@ -117,17 +115,17 @@ public class UserDao {
 //    }
 //
 //    // 해당 nickname을 갖는 유저들의 정보 조회
-//    public List<GetUserRes> getUsersByNickname(String nickname) {
-//        String getUsersByNicknameQuery = "select * from User where nickname =?"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
-//        String getUsersByNicknameParams = nickname;
-//        return this.jdbcTemplate.query(getUsersByNicknameQuery,
-//                (rs, rowNum) -> new GetUserRes(
-//                        rs.getInt("userIdx"),
-//                        rs.getString("nickname"),
-//                        rs.getString("Email"),
-//                        rs.getString("password")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-//                getUsersByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
-//    }
+////    public List<GetUserRes> getUsersByNickname(String nickname) {
+////        String getUsersByNicknameQuery = "select * from User where nickname =?"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
+////        String getUsersByNicknameParams = nickname;
+////        return this.jdbcTemplate.query(getUsersByNicknameQuery,
+////                (rs, rowNum) -> new GetUserRes(
+////                        rs.getInt("userIdx"),
+////                        rs.getString("nickname"),
+////                        rs.getString("Email"),
+////                        rs.getString("password")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+////                getUsersByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+////    }
 //
 //    // 해당 userIdx를 갖는 유저조회
 //    public GetUserRes getUser(int userIdx) {
@@ -142,12 +140,21 @@ public class UserDao {
 //                getUserParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
 //    }
 //
-//    // 해당 Email을 갖는 유저 삭제
-//    public int deleteUserByEmail(String userEmail){
-//        String deleteUserQueryByEamil = "delete from User where email =?"; //해당 이메일을 만족하는 유저를 조회하는 쿼리문
-//        String getUserByEmail = userEmail;
-//        return this.jdbcTemplate.update(deleteUserQueryByEamil, getUserByEmail);
-//    }
+    // 해당 Email을 갖는 유저 삭제
+    public int deleteUserByEmail(String userEmail){
+        String deleteUserQueryByEamil = "delete from user where email =?"; //해당 이메일을 만족하는 유저를 조회하는 쿼리문
+        String getUserByEmail = userEmail;
+        return this.jdbcTemplate.update(deleteUserQueryByEamil, getUserByEmail);
+    }
+
+    // 해당 email을 갖는 유저의 정보 조회
+    public int getUsersById(String email) {
+        String getUsersByEmailQuery = "select * from user where email =?"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
+        String getUsersByEmailParams = email;
+        return this.jdbcTemplate.queryForObject(getUsersByEmailQuery,
+                int.class,
+                getUsersByEmailParams);
+    }
 //
 //    public int reportUserCnt(PatchUserReq patchUserReq){
 //        String reportUserCntQuery = "update User set reportedCnt = ? where userIdx = ? ";

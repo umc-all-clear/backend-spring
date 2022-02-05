@@ -76,8 +76,6 @@ public class UserController {
             return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
         }
         if (!postSignUpReq.getPassword1().equals(postSignUpReq.getPassword2())){
-            System.out.println(postSignUpReq.getPassword1());
-            System.out.println(postSignUpReq.getPassword2());
             return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
         }
         //비밀번호 정규표현: 입력받은 비밀번호가 8자 이상인지, 특수문자(!,@,#,^)가 1개 이상인지 확인
@@ -146,7 +144,6 @@ public class UserController {
             }
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
-            System.out.println();
             if(postLoginRes.isState())return new BaseResponse<>(postLoginRes);
             else  return new BaseResponse<>(USERS_STATUS_NOT_ACTIVATED);
         } catch (BaseException exception) {
@@ -186,23 +183,27 @@ public class UserController {
     /**
 
      /**
-     * 삭제 API
+     * 회원 탈퇴 API
      * [DELETE] /users? email=
      */
-//    @ResponseBody
-//    @DeleteMapping("")
-//    public BaseResponse<String> deleteUser(@RequestParam(required = true) String email) {
-//        try {
-//            String deleteResult;
-//            int deleteUsersRes = userService.deleteUserByEmail(email);
-//
-//            if(deleteUsersRes==1) deleteResult = email + "이 성공적으로 삭제되었습니다.";
-//            else deleteResult = email + "삭제 실패.";
-//            return new BaseResponse<>(deleteResult);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    @ResponseBody
+    @PostMapping("/leave-account")
+    public BaseResponse<LeaveOutRes> deleteUser(@RequestParam LeaveOutReq leaveOutReq) {
+        try {
+            if (leaveOutReq.getEmail() == null){
+                return new BaseResponse<>(EMAIL_NOT_FOUND);
+            }
+
+            String deleteResult;
+            String email = leaveOutReq.getEmail();
+            LeaveOutRes leaveOutRes = userService.deleteUserByEmail(leaveOutReq);
+            if(leaveOutRes.getId() == 1) deleteResult = email + "이 성공적으로 삭제되었습니다.";
+            else deleteResult = email + "삭제 실패.";
+            return new BaseResponse<>(leaveOutRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
     /**
