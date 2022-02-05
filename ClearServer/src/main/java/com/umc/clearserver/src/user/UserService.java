@@ -35,15 +35,10 @@ public class UserService {
     // ******************************************************************************
     // 회원가입(POST)
     public PostSignUpRes createUser(PostSignUpReq postSignUpReq) throws BaseException {
-<<<<<<< Updated upstream
         // 중복 확인: 해당 이메일을 가진 유저가 있는지 확인합니다. 중복될 경우, 에러 메시지를 보냅니다.
-        System.out.println(userProvider.checkEmail(postSignUpReq.getEmail()));
-=======
->>>>>>> Stashed changes
         if (userProvider.checkEmail(postSignUpReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
-
         String pwd;
         try {
             // 암호화: postUserReq에서 제공받은 비밀번호를 보안을 위해 암호화시켜 DB에 저장합니다.
@@ -92,37 +87,20 @@ public class UserService {
 //        }
 //    }
 //
-//    //해당 email을 갖는 User의 정보 삭제
-//    public int deleteUserByEmail(LeaveOutReq leaveOutReq) throws BaseException{
-//        // 회원 조회
-//        int userId;
-//        try{
-//            userId = userDao.getUsersById(leaveOutReq.getEmail());
-//            System.out.println(userId);
-//        }
-//        catch (Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//        // 회원 jwt랑 받은 jwt와 비교
-//        String jwt = leaveOutReq.getJwt();
-//        try {
-//            if (jwtService.getUserIdx() == userId){
-//
-//            }
-//        }
-//        catch (Exception exception){
-//            throw new BaseException(INVALID_JWT)
-//        }
-//        if (userProvider.checkEmail(postSignUpReq.getEmail()) == 1) {
-//            throw new BaseException(POST_USERS_EXISTS_EMAIL);
-//        }
-//        try {
-//            int deleteUserRes = userDao.deleteUserByEmail(userEmail);
-//            return deleteUserRes;
-//        }catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+    //해당 email을 갖는 User의 정보 삭제
+    public LeaveOutRes deleteUserByEmail(LeaveOutReq leaveOutReq) throws BaseException{
+        // 회원 조회
+        String userEmail = leaveOutReq.getEmail();
+        if (userProvider.checkEmail(leaveOutReq.getEmail()) != 1) {
+            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+        }
+        try {
+            int userIdx = userDao.deleteUserByEmail(userEmail);
+            return new LeaveOutRes(userIdx);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     //++++++++++++++++++++++++++++++++++++++++++++++
     //전준휘의 영역 끝!
     //++++++++++++++++++++++++++++++++++++++++++++++

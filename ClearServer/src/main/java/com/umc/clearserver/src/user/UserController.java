@@ -186,24 +186,24 @@ public class UserController {
      * 회원 탈퇴 API
      * [DELETE] /users? email=
      */
-//    @ResponseBody
-//    @PostMapping("/leave-account")
-//    public BaseResponse<LeaveOutRes> deleteUser(@RequestParam LeaveOutReq leaveOutReq) {
-//        try {
-//            if (leaveOutReq.getEmail() == null){
-//                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-//            }
-//
-//            String deleteResult;
-//            int deleteUsersRes = userService.deleteUserByEmail(leaveOutReq);
-//
-//            if(deleteUsersRes==1) deleteResult = email + "이 성공적으로 삭제되었습니다.";
-//            else deleteResult = email + "삭제 실패.";
-//            return new BaseResponse<>(deleteResult);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    @ResponseBody
+    @PostMapping("/leave-account")
+    public BaseResponse<LeaveOutRes> deleteUser(@RequestParam LeaveOutReq leaveOutReq) {
+        try {
+            if (leaveOutReq.getEmail() == null){
+                return new BaseResponse<>(EMAIL_NOT_FOUND);
+            }
+
+            String deleteResult;
+            String email = leaveOutReq.getEmail();
+            LeaveOutRes leaveOutRes = userService.deleteUserByEmail(leaveOutReq);
+            if(leaveOutRes.getId() == 1) deleteResult = email + "이 성공적으로 삭제되었습니다.";
+            else deleteResult = email + "삭제 실패.";
+            return new BaseResponse<>(leaveOutRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
     /**

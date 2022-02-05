@@ -8,5 +8,4 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LeaveOutReq {
     private String email;
-    private String jwt;
 }
