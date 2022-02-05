@@ -1,4 +1,4 @@
-package com.example.demo.src.test;
+package com.umc.clearserver.src.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
