@@ -12,6 +12,7 @@ public class PostNoticeBoardRes {
     private String queryResult;
     private int writerID;
     private String writerEmail;
+    private String contents;
     private String beforePicUrl;
     private String afterPicUrl;
     private boolean isWaited;

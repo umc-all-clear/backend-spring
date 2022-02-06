@@ -21,9 +21,9 @@ public class NoticeBoardService {
         this.awsS3Service = awsS3Service;
     }
 
-    public PostNoticeBoardRes postToNoticeBoard(String beforePicUrl, String afterPicUrl, String userID) throws BaseException {
+    public PostNoticeBoardRes postToNoticeBoard(String beforePicUrl, String afterPicUrl, String userID, String userContent) throws BaseException {
         try{
-            PostNoticeBoardRes postNoticeBoardRes = noticeBoardDao.postNoticeBoardRes(beforePicUrl, afterPicUrl, userID);
+            PostNoticeBoardRes postNoticeBoardRes = noticeBoardDao.postNoticeBoardRes(beforePicUrl, afterPicUrl, userID, userContent);
             return postNoticeBoardRes;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
