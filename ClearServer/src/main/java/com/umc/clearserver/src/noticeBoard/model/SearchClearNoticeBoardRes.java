@@ -9,10 +9,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SearchClearNoticeBoardRes {
     private int postId;
+    private String cleanedAt;
     private String userEmail;
     private double score;
     private String contents;
     private String comments;
     private String beforePicUrl;
     private String afterPicUrl;
+    private boolean isWaited;
 }

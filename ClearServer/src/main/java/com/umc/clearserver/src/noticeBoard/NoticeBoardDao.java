@@ -36,42 +36,49 @@ public class NoticeBoardDao {
 
     public List<SearchClearNoticeBoardRes> viewNoticeBoard(SearchClearNoticeBoardReq searchClearNoticeBoardReq, String email){
         String getUserIdQuery = "SELECT id from user where email=?";
-        String historyTime = "\'" +searchClearNoticeBoardReq.getYear()+"-" + searchClearNoticeBoardReq.getMonth() + "-" + searchClearNoticeBoardReq.getDay() +" "+23+":"+59+":00\'";
-
+        int nextMonth = searchClearNoticeBoardReq.getMonth()+1;
+        String historyTime_start = "\'" +searchClearNoticeBoardReq.getYear()+"-" + searchClearNoticeBoardReq.getMonth() + "-1 0:0:0\'";
+        String historyTime_end = "\'" +searchClearNoticeBoardReq.getYear()+"-" + nextMonth + "-1 0:0:0\'";
+        System.out.println(historyTime_start);
+        System.out.println(historyTime_end);
         String userEmail = email;
         int ID = this.jdbcTemplate.queryForObject(getUserIdQuery, int.class, userEmail);
 
-        String getNoticeBoardQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where writer = %d AND createdAt < %s", ID, historyTime);
+        String getNoticeBoardQuery =  String.format("SELECT * From noticeBoard where writer = %d AND createdAt > %s AND createdAt < %s", ID, historyTime_start, historyTime_end);
         //Object[] getNoticeBoardQueryParam = new Object[]{ID, historyTime};
         System.out.println("=======================");
-        System.out.println("유저 " + email + "의 " + historyTime+"이전 게시물을 조회합니다.");
+        System.out.println("유저 " + email + "의 " + historyTime_start + "이후, " + historyTime_end+"이전 게시물을 조회합니다.");
         System.out.println("Executed Query: "+getNoticeBoardQuery);
         System.out.println("=======================");
         return this.jdbcTemplate.query(getNoticeBoardQuery,
                 (rs, rowNum) -> new SearchClearNoticeBoardRes(
                         rs.getInt("id"),
+                        rs.getString("cleanedAt"),
                         userEmail,
                         rs.getDouble("score"),
                         rs.getString("contents"),
                         rs.getString("comments"),
                         rs.getString("beforePic"),
-                        rs.getString("afterPic")
+                        rs.getString("afterPic"),
+                        rs.getBoolean("isWaited")
                 ));
     }
 
     public DeleteNoticeBoardRes deleteNoticeBoard(int idx, String email){
         String beforePicFileName = null, afterPicFileName = null;
-        String getBeforPicQuery =  String.format("SELECT id, score, contents, comments, beforePic, afterPic From noticeBoard where id=?", idx);
+        String getBeforPicQuery =  String.format("SELECT * From noticeBoard where id=?", idx);
         SearchClearNoticeBoardRes searchClearNoticeBoardRes;
         searchClearNoticeBoardRes = this.jdbcTemplate.queryForObject(getBeforPicQuery,
                 (rs, rowNum) -> new SearchClearNoticeBoardRes(
                         rs.getInt("id"),
+                        rs.getString("cleanedAt"),
                         email,
                         rs.getDouble("score"),
                         rs.getString("contents"),
                         rs.getString("comments"),
                         rs.getString("beforePic"),
-                        rs.getString("afterPic")
+                        rs.getString("afterPic"),
+                        rs.getBoolean("isWaited")
                 ), idx);
 
         String[] beforeUrlSplit = searchClearNoticeBoardRes.getBeforePicUrl().split("/");

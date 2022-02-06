@@ -11,5 +11,4 @@ import org.springframework.web.multipart.MultipartFile;
 public class SearchClearNoticeBoardReq {
     private int year;
     private int month;
-    private int day;
 }
