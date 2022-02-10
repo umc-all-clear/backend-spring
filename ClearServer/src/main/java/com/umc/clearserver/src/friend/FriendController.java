@@ -16,7 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.umc.clearserver.src.friend.model.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 import static com.umc.clearserver.src.utils.ValidationRegex.isRegexEmail;
@@ -77,5 +82,21 @@ public class FriendController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 친구 랭킹가져오기 API
+     * [get] /friends/ranking/
+     */
+    @GetMapping("/ranking")
+    public BaseResponse<List<GetFriendRankingRes>> rankingFriend(@RequestParam() int userId){
+        try{
+            List<GetFriendRankingRes> getFriendRankingRes = friendProvider.getFriendrank(userId);
+            return new BaseResponse<>(getFriendRankingRes);
+        }catch (BaseException exception)
+        {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 }

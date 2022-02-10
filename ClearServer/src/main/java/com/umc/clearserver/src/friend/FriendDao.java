@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -70,6 +71,19 @@ public class FriendDao {
         Object[] deleteFriendParams = new Object[]{0, friendId}; // 주입될 값들(state, id) 순
 
         return this.jdbcTemplate.update(deleteFriendQuery, deleteFriendParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
 
+    public List<GetFriendRankingRes> getFriendRank(Integer userId){
+        String getUserRankQuery = "SELECT writer, email ,AVG(score)\n" +
+                "From noticeBoard, user\n" +
+                "where '2022-2-1 0:0:0' < noticeBoard.createdAt and noticeBoard.createdAt < '2022-3-1 0:0:0' and noticeBoard.writer = user.id\n" +
+                "group by writer\n" +
+                "HAVING writer IN(SELECT user2 FROM friend WHERE user1 = ?);";
+        return this.jdbcTemplate.query(getUserRankQuery,
+                (rs, rowNum) -> new GetFriendRankingRes(
+                        rs.getInt("writer"),
+                        rs.getString("email"),
+                        rs.getDouble("AVG(score)")
+                ), userId);
     }
 }
