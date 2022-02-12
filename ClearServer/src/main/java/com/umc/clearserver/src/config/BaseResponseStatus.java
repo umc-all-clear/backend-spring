@@ -28,6 +28,9 @@ public enum BaseResponseStatus {
     USERS_EMPTY_USER_EMAIL(false, 2012, "유저 이메일 값을 확인해주세요"),
     EMAIL_NOT_FOUND(false, 400, "없는 유저 이메일입니다."),
 
+    // friend
+    FRIEND_ID_INAPPROPRIATE_FORMAT(false, 2100, "친구 ID값을 형식에 맞게 넣어주세요."),
+
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),

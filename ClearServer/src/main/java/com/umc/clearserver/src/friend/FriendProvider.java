@@ -1,6 +1,8 @@
 package com.umc.clearserver.src.friend;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.umc.clearserver.src.config.BaseException;
+import com.umc.clearserver.src.friend.model.GetFriendRankingRes;
 import com.umc.clearserver.src.user.model.GetUserRes;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -48,6 +50,14 @@ public class FriendProvider {
         }
     }
 
+    public List<GetFriendRankingRes> getFriendrank(Integer userId, Integer year, Integer month) throws BaseException{
+        try{
+            List<GetFriendRankingRes> getFriendIndexRes = friendDao.getFriendRank(userId, year, month);
+            return getFriendIndexRes;
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 
 

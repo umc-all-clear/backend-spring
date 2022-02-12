@@ -24,15 +24,18 @@ public class NoticeBoardController {
      */
     @PostMapping("/noticeboard/offering")
     public BaseResponse<PostNoticeBoardRes> postToNoticeBoard(@RequestParam("beforePic") MultipartFile multipartFile1, @RequestParam("afterPic") MultipartFile multipartFile2,
-                                                   @RequestParam("jsonRequest") String jsonParam) throws IOException {
+                                                   @RequestParam("jsonRequest") String jsonParam, @RequestParam("jsonRequestContent") String jsonContent) throws IOException {
         JSONObject jObject = new JSONObject(jsonParam);
         String userId = (String)jObject.get("clientID");
+
+        JSONObject jObjectContent = new JSONObject(jsonContent);
+        String userContent = (String)jObjectContent.get("content");
         PostNoticeBoardReq postNoticeBoardReq = new PostNoticeBoardReq(userId);
 
         String beforeImgUrl = awsS3Service.upload(multipartFile1, userId);
         String afterImgUrl = awsS3Service.upload(multipartFile2, userId);
         try{
-            PostNoticeBoardRes postNoticeBoardRes = noticeBoardService.postToNoticeBoard(beforeImgUrl, afterImgUrl, userId);
+            PostNoticeBoardRes postNoticeBoardRes = noticeBoardService.postToNoticeBoard(beforeImgUrl, afterImgUrl, userId, userContent);
             return new BaseResponse<>(postNoticeBoardRes);
         } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
