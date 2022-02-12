@@ -46,11 +46,7 @@ public class FriendService {
                 createFriendReq.setUser2(user2);
             }
 
-            System.out.println("33333333333333333333333333");
-
             friendDao.createFriend(createFriendReq);
-
-            System.out.println("444444444444444444444444444");
 
             return new CreateFriendReq(user1, user2, 1, 1);
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.

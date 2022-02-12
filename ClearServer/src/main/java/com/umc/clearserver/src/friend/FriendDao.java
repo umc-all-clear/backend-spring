@@ -75,17 +75,10 @@ public class FriendDao {
     }
 
     public int createFriend(CreateFriendReq createFriendReq) {
-        System.out.println("5555555555555555555555555555555");
         String createFriendQuery = "insert into friend(user1, user2, isAccepted,state) VALUES(?,?,?,?)"; // 실행될 동적 쿼리문
-        System.out.println("6666666666666666666666666666666666");
 
-        System.out.println("User1 : " + createFriendReq.getUser1() + " User2 : " + createFriendReq.getUser2());
         Object[] createFriendParams = new Object[]{createFriendReq.getUser1(), createFriendReq.getUser2(), 1, 1}; // 동적 쿼리의 ?부분에 주입될 값
-        System.out.println("77777777777777777777777777777777777");
 
-        Object tmp = this.jdbcTemplate.update(createFriendQuery, createFriendParams);
-        System.out.println(tmp);
-        System.out.println("888888888888888888888888888");
         return this.jdbcTemplate.update(createFriendQuery, createFriendParams);
 
     }

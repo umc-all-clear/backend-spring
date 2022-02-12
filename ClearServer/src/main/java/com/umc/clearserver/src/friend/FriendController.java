@@ -92,12 +92,7 @@ public class FriendController {
         if(createFriendReq.getUser1() == createFriendReq.getUser2()){
             return new BaseResponse<>(SAME_USER_NUMBER);
         }
-
-        System.out.println("1111111111111111111111");
-
         CreateFriendReq createFriendRequest  = friendService.createFriend(createFriendReq);
-
-        System.out.println("22222222222222222222222");
 
         return new BaseResponse<>(createFriendRequest);
     }
