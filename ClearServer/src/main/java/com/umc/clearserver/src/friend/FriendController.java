@@ -98,5 +98,24 @@ public class FriendController {
         }
     }
 
+    /**
+     * 친구 관계 가져오기 API
+     * [Get] /friends/relation/:user1/:user2
+     */
+    @ResponseBody
+    @GetMapping("/relation")
+    public BaseResponse<GetFriendRelationRes> getUser(@RequestParam() int user1, int user2) {
+        // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
+        //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
+        //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
+        // Get Users
+        try {
+            GetFriendRelationRes getFriendRelationRes = friendProvider.getFriendRelation(user1, user2);
+            return new BaseResponse<>(getFriendRelationRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 
 }
