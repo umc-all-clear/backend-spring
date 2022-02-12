@@ -39,6 +39,9 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PASSWORD(false,2019,"비밀번호 형식을 확인해주세요."),
     POST_USERS_EMPTY_NICKNAME(false, 400, "닉네임을 입력해주세요."),
 
+    NO_USER_NUMBER_MINUS(false, 2020,"USER 번호가 음수입니다."),
+    SAME_USER_NUMBER(false,2021,"USER 번호가 같습니다"),
+
 
 
     /**
