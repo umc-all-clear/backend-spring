@@ -1,6 +1,7 @@
 package com.umc.clearserver.src.friend;
 
 import com.umc.clearserver.src.user.model.GetUserRes;
+import com.umc.clearserver.src.user.model.PostSignUpReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -102,4 +103,14 @@ public class FriendDao {
                         rs.getInt("state")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
                 getFriendRelationParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
+
+    public int createFriend(CreateFriendReq createFriendReq) {
+        String createFriendQuery = "insert into friend(user1, user2, isAccepted,state) VALUES(?,?,?,?)"; // 실행될 동적 쿼리문
+
+        Object[] createFriendParams = new Object[]{createFriendReq.getUser1(), createFriendReq.getUser2(), 1, 1}; // 동적 쿼리의 ?부분에 주입될 값
+
+        return this.jdbcTemplate.update(createFriendQuery, createFriendParams);
+
+    }
+
 }
