@@ -57,12 +57,6 @@ public class FriendDao {
     }
 
     public int deleteFriend(PatchFriendReq patchFriendReq) {
-        /*
-        String deleteProductQuery = "update Friend set state = ? where user1 = ? and user2 = ? "; // 해당 productIdx를 만족하는 Product를 해당 productName으로 변경한다.
-        Object[] deleteProductParams = new Object[]{"inactive", patchFriendReq.getUser1(), patchFriendReq.getUser2()}; // 주입될 값들(nickname, userIdx) 순
-
-        return this.jdbcTemplate.update(deleteProductQuery, deleteProductParams);
-        */
         int u1 = patchFriendReq.getUser1();
         int u2 = patchFriendReq.getUser2();
         int friendId = jdbcTemplate.queryForObject(
@@ -73,12 +67,24 @@ public class FriendDao {
         return this.jdbcTemplate.update(deleteFriendQuery, deleteFriendParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
-    public List<GetFriendRankingRes> getFriendRank(Integer userId){
-        String getUserRankQuery = "SELECT writer, email ,AVG(score)\n" +
+    public List<GetFriendRankingRes> getFriendRank(Integer userId, Integer year, Integer month){
+        int nextMonth = month+1;
+
+        String prevMonth = "\'" + year + "-" + month + "-1 0:0:0'";
+        String postMonth = "\'" + year + "-" + nextMonth + "-1 0:0:0'";
+
+        Object[] getFriendRankParams = new Object[]{prevMonth, postMonth, userId};
+
+        System.out.println(prevMonth);
+        System.out.println(postMonth);
+
+        String getUserRankQuery = "SELECT writer, email ,AVG(score)\n"+
                 "From noticeBoard, user\n" +
-                "where '2022-2-1 0:0:0' < noticeBoard.createdAt and noticeBoard.createdAt < '2022-3-1 0:0:0' and noticeBoard.writer = user.id\n" +
+                "where" + prevMonth + "< noticeBoard.createdAt and noticeBoard.createdAt <" + postMonth+ "and noticeBoard.writer = user.id\n" +
                 "group by writer\n" +
-                "HAVING writer IN(SELECT user2 FROM friend WHERE user1 = ?);";
+                "HAVING writer IN(SELECT user2 FROM friend WHERE user1 = ?) \n" +
+                "ORDER BY AVG(score) DESC";
+        System.out.println(getUserRankQuery);
         return this.jdbcTemplate.query(getUserRankQuery,
                 (rs, rowNum) -> new GetFriendRankingRes(
                         rs.getInt("writer"),

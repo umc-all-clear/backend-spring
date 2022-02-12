@@ -50,9 +50,9 @@ public class FriendProvider {
         }
     }
 
-    public List<GetFriendRankingRes> getFriendrank(Integer userId) throws BaseException{
+    public List<GetFriendRankingRes> getFriendrank(Integer userId, Integer year, Integer month) throws BaseException{
         try{
-            List<GetFriendRankingRes> getFriendIndexRes = friendDao.getFriendRank(userId);
+            List<GetFriendRankingRes> getFriendIndexRes = friendDao.getFriendRank(userId, year, month);
             return getFriendIndexRes;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);

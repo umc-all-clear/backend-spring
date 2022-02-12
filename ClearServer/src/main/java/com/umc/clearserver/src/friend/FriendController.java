@@ -88,9 +88,9 @@ public class FriendController {
      * [get] /friends/ranking/
      */
     @GetMapping("/ranking")
-    public BaseResponse<List<GetFriendRankingRes>> rankingFriend(@RequestParam() int userId){
+    public BaseResponse<List<GetFriendRankingRes>> rankingFriend(@RequestParam() int userId, int year, int month){
         try{
-            List<GetFriendRankingRes> getFriendRankingRes = friendProvider.getFriendrank(userId);
+            List<GetFriendRankingRes> getFriendRankingRes = friendProvider.getFriendrank(userId, year, month);
             return new BaseResponse<>(getFriendRankingRes);
         }catch (BaseException exception)
         {
