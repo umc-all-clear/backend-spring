@@ -2,6 +2,7 @@ package com.umc.clearserver.src.friend;
 
 import com.umc.clearserver.src.config.BaseException;
 import com.umc.clearserver.src.config.secret.Secret;
+import com.umc.clearserver.src.friend.model.CreateFriendReq;
 import com.umc.clearserver.src.friend.model.PatchFriendReq;
 import com.umc.clearserver.src.user.UserDao;
 import com.umc.clearserver.src.user.UserProvider;
@@ -28,6 +29,33 @@ public class FriendService {
     public FriendService(FriendDao friendDao, FriendProvider friendProvider) {
         this.friendDao = friendDao;
         this.friendProvider = friendProvider;
+    }
+
+    public CreateFriendReq createFriend(CreateFriendReq createFriendReq) throws BaseException {
+
+        try {
+            int user1 = (createFriendReq.getUser1());
+            int user2 = (createFriendReq.getUser2());
+
+            if(user1 > user2){
+                int tmp = user1;
+                user1 = user2;
+                user2 = tmp;
+
+                createFriendReq.setUser1(user1);
+                createFriendReq.setUser2(user2);
+            }
+
+            System.out.println("33333333333333333333333333");
+
+            friendDao.createFriend(createFriendReq);
+
+            System.out.println("444444444444444444444444444");
+
+            return new CreateFriendReq(user1, user2, 1, 1);
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     // 회원정보 삭제(Patch)
