@@ -184,24 +184,22 @@ public class UserController {
 
      /**
      * 회원 탈퇴 API
-     * [DELETE] /users? email=
+     * [POST] /users/leave-account
      */
     @ResponseBody
     @PostMapping("/leave-account")
-    public BaseResponse<LeaveOutRes> deleteUser(@RequestParam LeaveOutReq leaveOutReq) {
+    public BaseResponse<LeaveOutRes> deleteUser(@RequestBody LeaveOutReq leaveOutReq) {
         try {
             if (leaveOutReq.getEmail() == null){
                 return new BaseResponse<>(EMAIL_NOT_FOUND);
             }
-
-            String deleteResult;
+            //String deleteResult;
             String email = leaveOutReq.getEmail();
             LeaveOutRes leaveOutRes = userService.deleteUserByEmail(leaveOutReq);
-            if(leaveOutRes.getId() == 1) deleteResult = email + "이 성공적으로 삭제되었습니다.";
-            else deleteResult = email + "삭제 실패.";
+            //deleteResult = email + "이 성공적으로 삭제되었습니다.";
             return new BaseResponse<>(leaveOutRes);
         } catch (BaseException exception) {
-            return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>(FAILED_TO_DELETE_USER);
         }
     }
 
@@ -230,19 +228,19 @@ public class UserController {
     /**
      * 유저정보변경 API
      * [PATCH] /users/:userIdx
-
+    **/
     @ResponseBody
-    @PatchMapping("/{userIdx}")
-    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user) {
+    @PatchMapping("/{userIdx}/nickname")
+    public BaseResponse<String> changeNickname(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserNickname patchUserNickname) {
         try {
                 //jwt에서 idx 추출.
-                int userIdxByJwt = jwtService.getUserIdx();
+                //int userIdxByJwt = jwtService.getUserIdx();
                 //userIdx와 접근한 유저가 같은지 확인
-                if(userIdx != userIdxByJwt){
-                    return new BaseResponse<>(INVALID_USER_JWT);
-                }
+//                if(userIdx != userIdxByJwt){
+//                    return new BaseResponse<>(INVALID_USER_JWT);
+//                }
                 //같다면 유저네임 변경
-                PatchUserReq patchUserReq = new PatchUserReq(userIdx, user.getNickname());
+                PatchUserReq patchUserReq = new PatchUserReq(userIdx, patchUserNickname.getNewNickname());
                 userService.modifyUserName(patchUserReq);
 
                 String result = "회원정보가 수정되었습니다.";
@@ -251,32 +249,7 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-    */
 
-    /**
-     *  유저 신고 Cnt 추가
-     *  [Post] /users/:userIdx
-     */
-//    @ResponseBody
-//    @PatchMapping("/{userIdx}")
-//    public BaseResponse<String> reportUserCount(@PathVariable("userIdx") int userIdx, @RequestBody User user) {
-//        try {
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //같다면 유저 신고횟수 추가
-//            PatchUserReq patchUserReq = new PatchUserReq(userIdx, user.getNickname());
-//            userService.modifyReportedCnt(patchUserReq);
-//
-//            String result = "회원정보가 수정되었습니다.";
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
     //++++++++++++++++++++++++++++++++++++++++++++++
     //전준휘의 영역 끝!
     //++++++++++++++++++++++++++++++++++++++++++++++

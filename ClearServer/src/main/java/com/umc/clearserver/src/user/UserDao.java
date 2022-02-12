@@ -1,5 +1,6 @@
 package com.umc.clearserver.src.user;
 
+import com.umc.clearserver.src.user.model.PatchUserReq;
 import com.umc.clearserver.src.user.model.PostLoginReq;
 import com.umc.clearserver.src.user.model.PostSignUpReq;
 import com.umc.clearserver.src.user.model.User;
@@ -74,15 +75,6 @@ public class UserDao {
                 checkEmailParams); // checkEmailQuery, checkEmailParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
     }
 
-//    // 회원정보 변경
-//    public int modifyUserName(PatchUserReq patchUserReq) {
-//        String modifyUserNameQuery = "update User set nickname = ? where userIdx = ? "; // 해당 userIdx를 만족하는 User를 해당 nickname으로 변경한다.
-//        Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserIdx()}; // 주입될 값들(nickname, userIdx) 순
-//
-//        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
-//    }
-//
-//
 //    // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
     public User getPwd(PostLoginReq postLoginReq) {
         String getPwdQuery = "select * from user where email = ?"; // 해당 email을 만족하는 User의 정보들을 조회한다.
@@ -148,12 +140,20 @@ public class UserDao {
     }
 
     // 해당 email을 갖는 유저의 정보 조회
-    public int getUsersById(String email) {
-        String getUsersByEmailQuery = "select * from user where email =?"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
+    public int getUsersByEmail(String email) {
+        String getUsersByEmailQuery = "select id from user where email =?"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
         String getUsersByEmailParams = email;
         return this.jdbcTemplate.queryForObject(getUsersByEmailQuery,
                 int.class,
                 getUsersByEmailParams);
+    }
+
+    // 회원정보 변경
+    public int modifyUserName(PatchUserReq patchUserReq) {
+        String modifyUserNameQuery = "update user set nickname = ? where id = ? "; // 해당 userIdx를 만족하는 User를 해당 nickname으로 변경한다.
+        Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserIdx()}; // 주입될 값들(nickname, userIdx) 순
+
+        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 //
 //    public int reportUserCnt(PatchUserReq patchUserReq){
