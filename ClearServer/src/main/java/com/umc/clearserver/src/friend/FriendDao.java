@@ -100,20 +100,21 @@ public class FriendDao {
 
         if(isUserExistCnt == 0)
         {
-            return (List<GetFriendRelationRes>) new GetFriendRelationRes(-1, "user2NotExist!", "user2NotExist!");
+            return (List<GetFriendRelationRes>) new GetFriendRelationRes(-1, "user2NotExist!", "user2NotExist!", -1);
         }
 
         String getFriendRelationQuery = "select COUNT(state) from friend where user1 = (SELECT id FROM user WHERE email=?) and user2 = (SELECT id FROM user WHERE email=?);"; // 해당 userIdx를 만족하는 유저를 조회하는 쿼리문
         Object[] getFriendRelationParams = new Object[]{user1, user2};
 
-        String getFriendInfoQuery = "SELECT nickname, email FROM user WHERE email = ?";
+        String getFriendInfoQuery = "SELECT nickname, email, id FROM user WHERE email = ?";
         int friendState = this.jdbcTemplate.queryForObject(getFriendRelationQuery, Integer.class, getFriendRelationParams);
 
         return this.jdbcTemplate.query(getFriendInfoQuery,
                 (rs, rowNum) -> new GetFriendRelationRes(
                         friendState,
                         rs.getString("nickname"),
-                        rs.getString("email")
+                        rs.getString("email"),
+                        rs.getInt("id")
                 ), user2);
     }
 
