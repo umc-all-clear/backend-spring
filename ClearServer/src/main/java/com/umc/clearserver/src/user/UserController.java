@@ -85,6 +85,9 @@ public class UserController {
 //        {
 //            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
 //        }
+        if(postSignUpReq.getPassword1().contains(" ")){
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+        }
         // 닉네임 관련
         if (postSignUpReq.getNickname() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
