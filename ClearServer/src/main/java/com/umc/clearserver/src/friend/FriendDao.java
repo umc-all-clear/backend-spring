@@ -1,19 +1,13 @@
 package com.umc.clearserver.src.friend;
 
 import com.umc.clearserver.src.user.model.GetUserRes;
-import com.umc.clearserver.src.user.model.PostSignUpReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.umc.clearserver.src.friend.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -95,14 +89,26 @@ public class FriendDao {
     }
 
     // 해당 userIdx를 갖는 유저조회
-    public GetFriendRelationRes getFriendRelation(int user1, int user2) {
-        String getFriendRelationQuery = "select state from friend where user1 = ? and user2 = ?"; // 해당 userIdx를 만족하는 유저를 조회하는 쿼리문
+    public List<GetFriendRelationRes> getFriendRelation(String user1, String user2) {
+        System.out.println("========친구 관계를 조회합니다========");
+        System.out.println("user1 이메일: " + user1);
+        System.out.println("user1 이메일: " + user2);
+        System.out.println("========친구 관계를 조회 끝=========");
+
+        String getFriendRelationQuery = "select COUNT(state) from friend where user1 = (SELECT id FROM user WHERE email=?) and user2 = (SELECT id FROM user WHERE email=?);"; // 해당 userIdx를 만족하는 유저를 조회하는 쿼리문
         Object[] getFriendRelationParams = new Object[]{user1, user2};
-        return this.jdbcTemplate.queryForObject(getFriendRelationQuery,
+
+        String getFriendInfoQuery = "SELECT nickname, email FROM user WHERE email = ?";
+        int friendState = this.jdbcTemplate.queryForObject(getFriendRelationQuery, Integer.class, getFriendRelationParams);
+
+        return this.jdbcTemplate.query(getFriendInfoQuery,
                 (rs, rowNum) -> new GetFriendRelationRes(
-                        rs.getInt("state")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-                getFriendRelationParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+                        friendState,
+                        rs.getString("nickname"),
+                        rs.getString("email")
+                ), user2);
     }
+
 
     public int createFriend(CreateFriendReq createFriendReq) {
         String createFriendQuery = "insert into friend(user1, user2, isAccepted,state) VALUES(?,?,?,?)"; // 실행될 동적 쿼리문

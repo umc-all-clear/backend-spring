@@ -3,28 +3,18 @@ package com.umc.clearserver.src.friend;
 import com.umc.clearserver.src.config.BaseException;
 import com.umc.clearserver.src.config.BaseResponse;
 import com.umc.clearserver.src.user.model.GetUserRes;
-import com.umc.clearserver.src.user.model.PostSignUpReq;
-import com.umc.clearserver.src.user.model.PostSignUpRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
-import com.umc.clearserver.src.config.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 import com.umc.clearserver.src.friend.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
-import static com.umc.clearserver.src.utils.ValidationRegex.isRegexEmail;
 
 @RequestMapping("/friends")
 @RestController
@@ -104,13 +94,13 @@ public class FriendController {
      */
     @ResponseBody
     @GetMapping("/relation")
-    public BaseResponse<GetFriendRelationRes> getUser(@RequestParam() int user1, int user2) {
+    public BaseResponse<List<GetFriendRelationRes>> getUser(@RequestParam() String user1, String user2) {
         // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
         //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
         //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
         // Get Users
         try {
-            GetFriendRelationRes getFriendRelationRes = friendProvider.getFriendRelation(user1, user2);
+            List<GetFriendRelationRes> getFriendRelationRes = friendProvider.getFriendRelation(user1, user2);
             return new BaseResponse<>(getFriendRelationRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -136,5 +126,4 @@ public class FriendController {
 
         return new BaseResponse<>(createFriendRequest);
     }
-
 }

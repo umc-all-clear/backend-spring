@@ -42,6 +42,8 @@ public enum BaseResponseStatus {
     NO_USER_NUMBER_MINUS(false, 2020,"USER 번호가 음수입니다."),
     SAME_USER_NUMBER(false,2021,"USER 번호가 같습니다"),
 
+    POST_ADMIN_INVALID_SCORE(false, 2030, "잘못된 평점 형식입니다."),
+
 
 
     /**
