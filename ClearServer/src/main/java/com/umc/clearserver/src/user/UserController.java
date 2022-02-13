@@ -188,7 +188,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/")
-    public BaseResponse<List<GetAllUserRes>> getUsers(@RequestParam(value="id", required=false, defaultValue="50") int id){
+    public BaseResponse<List<GetAllUserRes>> getUsers(){
         try{
             List<GetAllUserRes> getAllUserRes = userProvider.getUsers();
             return new BaseResponse<>(getAllUserRes);
