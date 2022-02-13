@@ -95,6 +95,14 @@ public class FriendDao {
         System.out.println("user1 이메일: " + user2);
         System.out.println("========친구 관계를 조회 끝=========");
 
+        String isUserExist = "select COUNT(state) from user where email=?";
+        int isUserExistCnt = this.jdbcTemplate.queryForObject(isUserExist, Integer.class ,user2);
+
+        if(isUserExistCnt == 0)
+        {
+            return (List<GetFriendRelationRes>) new GetFriendRelationRes(-1, "user2NotExist!", "user2NotExist!");
+        }
+
         String getFriendRelationQuery = "select COUNT(state) from friend where user1 = (SELECT id FROM user WHERE email=?) and user2 = (SELECT id FROM user WHERE email=?);"; // 해당 userIdx를 만족하는 유저를 조회하는 쿼리문
         Object[] getFriendRelationParams = new Object[]{user1, user2};
 
