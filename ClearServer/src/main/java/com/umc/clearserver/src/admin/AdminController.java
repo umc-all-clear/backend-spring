@@ -37,6 +37,9 @@ public class AdminController {
         //  @RequestBody란, 클라이언트가 전송하는 HTTP Request Body(우리는 JSON으로 통신하니, 이 경우 body는 JSON)를 자바 객체로 매핑시켜주는 어노테이션
         try {
             if (admin.getId()==null) {
+                return new BaseResponse<>(POST_ADMIN_ID_NULL);
+            }
+            if (admin.getScore()>5.0 | admin.getScore()<0){
                 return new BaseResponse<>(POST_ADMIN_INVALID_SCORE);
             }
             PostEvaluateReq postEvaluateReq = new PostEvaluateReq(admin.getId(), admin.getScore(), admin.getComments());

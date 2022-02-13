@@ -43,7 +43,7 @@ public enum BaseResponseStatus {
     SAME_USER_NUMBER(false,2021,"USER 번호가 같습니다"),
 
     POST_ADMIN_INVALID_SCORE(false, 2030, "잘못된 평점 형식입니다."),
-
+    POST_ADMIN_ID_NULL(false, 2030,"noticeBoardId 값이 없습니다."),
 
 
     /**
