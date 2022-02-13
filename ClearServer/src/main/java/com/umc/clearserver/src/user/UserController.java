@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 import static com.umc.clearserver.src.utils.ValidationRegex.isRegexEmail;
 
@@ -180,6 +182,19 @@ public class UserController {
 //            return new BaseResponse<>((exception.getStatus()));
 //        }
 //    }
+
+    @ResponseBody
+    @GetMapping("/")
+    public BaseResponse<List<GetAllUserRes>> getUsers(@RequestParam(value="id", required=false, defaultValue="50") int id){
+        try{
+            List<GetAllUserRes> getAllUserRes = userProvider.getUsers();
+            return new BaseResponse<>(getAllUserRes);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     /**
 
      /**
@@ -250,34 +265,6 @@ public class UserController {
         }
     }
 
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //전준휘의 영역 끝!
-    //++++++++++++++++++++++++++++++++++++++++++++++
-
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //송해광님의 영역
-    //++++++++++++++++++++++++++++++++++++++++++++++
-
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //송해광님의 영역 끝!
-    //++++++++++++++++++++++++++++++++++++++++++++++
-
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //김현주님의 영역!
-    //++++++++++++++++++++++++++++++++++++++++++++++
-
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //김현주님의 영역 끝!
-    //++++++++++++++++++++++++++++++++++++++++++++++
-
-
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //김영진님의 영역!
-    //++++++++++++++++++++++++++++++++++++++++++++++
-
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //김영진님의 영역 끝!
-    //++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 
