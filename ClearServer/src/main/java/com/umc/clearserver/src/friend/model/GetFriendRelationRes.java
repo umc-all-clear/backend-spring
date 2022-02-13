@@ -9,4 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetFriendRelationRes {
     private int state;
+    private String friendNickname;
+    private String friendEmail;
 }
