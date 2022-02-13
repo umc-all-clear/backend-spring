@@ -1,19 +1,21 @@
 package com.umc.clearserver.src.friend;
 
 import com.umc.clearserver.src.config.BaseException;
-import com.umc.clearserver.src.config.secret.Secret;
 import com.umc.clearserver.src.friend.model.CreateFriendReq;
+import com.umc.clearserver.src.friend.model.CreateFriendRes;
 import com.umc.clearserver.src.friend.model.PatchFriendReq;
 import com.umc.clearserver.src.user.UserDao;
 import com.umc.clearserver.src.user.UserProvider;
+import com.umc.clearserver.src.user.model.GetUserRes;
 import com.umc.clearserver.src.user.model.PostSignUpReq;
 import com.umc.clearserver.src.user.model.PostSignUpRes;
-import com.umc.clearserver.src.utils.AES128;
-import com.umc.clearserver.src.utils.JwtService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 
@@ -31,28 +33,38 @@ public class FriendService {
         this.friendProvider = friendProvider;
     }
 
-    public CreateFriendReq createFriend(CreateFriendReq createFriendReq) throws BaseException {
+    public CreateFriendRes createFriend(CreateFriendReq createFriendReq) throws BaseException {
 
         try {
-            int user1 = (createFriendReq.getUser1());
-            int user2 = (createFriendReq.getUser2());
 
-            if(user1 > user2){
-                int tmp = user1;
-                user1 = user2;
-                user2 = tmp;
+            List<GetUserRes> user1 = friendDao.getUsersByEmail(createFriendReq.getUser1());
+            List<GetUserRes> user2 = friendDao.getUsersByEmail(createFriendReq.getUser2());
 
-                createFriendReq.setUser1(user1);
-                createFriendReq.setUser2(user2);
+            int user1_idx = user1.get(0).getUserIdx();
+            int user2_idx = user2.get(0).getUserIdx();
+
+            if(user1_idx > user2_idx){
+                int tmp = user1_idx;
+                user1_idx = user2_idx;
+                user2_idx = tmp;
             }
 
             friendDao.createFriend(createFriendReq);
 
-            return new CreateFriendReq(user1, user2, 1, 1);
+            return new CreateFriendRes(user1_idx, user2_idx, 1, 1);
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public int GetUsersByEmail(String email){
+        List<GetUserRes> list = friendDao.getUsersByEmail(email);
+
+        return list.get(0).getUserIdx();
+    }
+
+
+
 
     // 회원정보 삭제(Patch)
     public void deleteFriend(PatchFriendReq patchFriendReq) throws BaseException {
