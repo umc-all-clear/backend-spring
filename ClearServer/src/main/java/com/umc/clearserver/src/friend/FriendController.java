@@ -24,7 +24,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
-import static com.umc.clearserver.src.utils.ValidationRegex.isRegexEmail;
 
 @RequestMapping("/friends")
 @RestController
@@ -122,19 +121,19 @@ public class FriendController {
     @PostMapping("/create")    // POST 방식의 요청을 매핑하기 위한 어노테이션
     public BaseResponse<CreateFriendReq> createFriend(@RequestBody CreateFriendReq createFriendReq) throws BaseException {
         //  @RequestBody란, 클라이언트가 전송하는 HTTP Request Body(우리는 JSON으로 통신하니, 이 경우 body는 JSON)를 자바 객체로 매핑시켜주는 어노테이션
-        if(createFriendReq.getUser1() < 0){
-            return new BaseResponse<>(NO_USER_NUMBER_MINUS);
-        }
-        if(createFriendReq.getUser2() < 0){
+
+        if(friendService.GetUsersByEmail(createFriendReq.getUser1()) < 0
+            || friendService.GetUsersByEmail(createFriendReq.getUser2()) < 0){
             return new BaseResponse<>(NO_USER_NUMBER_MINUS);
         }
 
-        if(createFriendReq.getUser1() == createFriendReq.getUser2()){
+        if(friendService.GetUsersByEmail(createFriendReq.getUser1()) == friendService.GetUsersByEmail(createFriendReq.getUser2())){
             return new BaseResponse<>(SAME_USER_NUMBER);
         }
-        CreateFriendReq createFriendRequest  = friendService.createFriend(createFriendReq);
 
-        return new BaseResponse<>(createFriendRequest);
+        CreateFriendRes createFriendResponse  = friendService.createFriend(createFriendReq);
+
+        return new BaseResponse<>(createFriendReq);
     }
 
 }
