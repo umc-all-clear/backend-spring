@@ -1,14 +1,12 @@
 package com.umc.clearserver.src.user;
 
-import com.umc.clearserver.src.user.model.PatchUserReq;
-import com.umc.clearserver.src.user.model.PostLoginReq;
-import com.umc.clearserver.src.user.model.PostSignUpReq;
-import com.umc.clearserver.src.user.model.User;
+import com.umc.clearserver.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository //  [Persistence Layer에서 DAO를 명시하기 위해 사용]
 
@@ -93,18 +91,19 @@ public class UserDao {
                 getPwdParams
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
-//
-//    // User 테이블에 존재하는 전체 유저들의 정보 조회
-//    public List<GetUserRes> getUsers() {
-//        String getUsersQuery = "select * from User"; //User 테이블에 존재하는 모든 회원들의 정보를 조회하는 쿼리
-//        return this.jdbcTemplate.query(getUsersQuery,
-//                (rs, rowNum) -> new GetUserRes(
-//                        rs.getInt("userIdx"),
-//                        rs.getString("nickname"),
-//                        rs.getString("Email"),
-//                        rs.getString("password")) // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-//        ); // 복수개의 회원정보들을 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보)의 결과 반환(동적쿼리가 아니므로 Parmas부분이 없음)
-//    }
+
+    // User 테이블에 존재하는 전체 유저들의 정보 조회
+    public List<GetAllUserRes> getUsers() {
+        String getUsersQuery = "select * from user"; //User 테이블에 존재하는 모든 회원들의 정보를 조회하는 쿼리
+        return this.jdbcTemplate.query(getUsersQuery,
+                (rs, rowNum) -> new GetAllUserRes(
+                        rs.getInt("id"),
+                        rs.getString("nickname"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getTimestamp("createdAt")) // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+        ); // 복수개의 회원정보들을 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보)의 결과 반환(동적쿼리가 아니므로 Parmas부분이 없음)
+    }
 //
 //    // 해당 nickname을 갖는 유저들의 정보 조회
 ////    public List<GetUserRes> getUsersByNickname(String nickname) {

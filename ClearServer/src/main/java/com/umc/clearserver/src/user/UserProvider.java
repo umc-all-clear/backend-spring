@@ -2,17 +2,16 @@ package com.umc.clearserver.src.user;
 
 import com.umc.clearserver.src.config.BaseException;
 import com.umc.clearserver.src.config.secret.Secret;
-import com.umc.clearserver.src.user.model.PostLoginReq;
-import com.umc.clearserver.src.user.model.PostLoginRes;
-import com.umc.clearserver.src.user.model.User;
+import com.umc.clearserver.src.user.model.*;
 import com.umc.clearserver.src.utils.AES128;
 import com.umc.clearserver.src.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 
-import static com.umc.clearserver.src.config.BaseResponseStatus.DATABASE_ERROR;
+import java.util.List;
+
+import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service    // [Business Layer에서 Service를 명시하기 위해서 사용] 비즈니스 로직이나 respository layer 호출하는 함수에 사용된다.
@@ -71,15 +70,15 @@ public class UserProvider {
     }
 
 
-//    // User들의 정보를 조회
-//    public List<GetUserRes> getUsers() throws BaseException {
-//        try {
-//            List<GetUserRes> getUserRes = userDao.getUsers();
-//            return getUserRes;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+    // User들의 정보를 조회
+    public List<GetAllUserRes> getUsers() throws BaseException {
+        try {
+            List<GetAllUserRes> getUserRes = userDao.getUsers();
+            return getUserRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    // 해당 nickname을 갖는 User들의 정보 조회
 //    public List<GetUserRes> getUsersByNickname(String nickname) throws BaseException {
