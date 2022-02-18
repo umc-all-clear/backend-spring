@@ -8,6 +8,7 @@ import com.umc.clearserver.src.friend.model.*;
 
 import javax.sql.DataSource;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -68,11 +69,21 @@ public class FriendDao {
         String prevMonth = "\'" + year + "-" + month + "-1 0:0:0'";
         String postMonth = "\'" + year + "-" + nextMonth + "-1 0:0:0'";
 
-        Object[] getFriendRankParams = new Object[]{prevMonth, postMonth, userId};
+        //우선 친구 목록을 불러옵니다.
+        String getFriendListQuery ="SELECT DISTINCT user2\n" +
+                "FROM friend\n" +
+                "where user1 = ?;";
+        List<Integer> friendList = this.jdbcTemplate.query(getFriendListQuery,
+                (rs, rowNum) -> new Integer(
+                        rs.getInt("user2")
+                )
+                , userId);
+        for(int i=0; i<friendList.size(); i++)
+        {
+            System.out.println(friendList.get(i));
+        }
 
-        System.out.println(prevMonth);
-        System.out.println(postMonth);
-
+        //친구들 중 noticeBoard에 게시글을 올린 사람을 불러와 평점순으로 내림차순 정렬합니다.
         String getUserRankQuery = "SELECT writer, email ,AVG(score)\n"+
                 "From noticeBoard, user\n" +
                 "where" + prevMonth + "< noticeBoard.createdAt and noticeBoard.createdAt <" + postMonth+ "and noticeBoard.writer = user.id\n" +
