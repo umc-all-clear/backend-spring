@@ -8,7 +8,9 @@ import com.umc.clearserver.src.friend.model.*;
 
 import javax.sql.DataSource;
 
+import java.sql.PreparedStatement;
 import java.util.List;
+import com.umc.clearserver.src.utils.Pair;
 
 @Repository
 public class FriendDao {
@@ -68,11 +70,17 @@ public class FriendDao {
         String prevMonth = "\'" + year + "-" + month + "-1 0:0:0'";
         String postMonth = "\'" + year + "-" + nextMonth + "-1 0:0:0'";
 
-        Object[] getFriendRankParams = new Object[]{prevMonth, postMonth, userId};
+        //우선 친구 목록을 불러옵니다.
+        String getFriendListQuery ="SELECT DISTINCT user2, email FROM friend, user where user.id=friend.user2 and friend.user1 = ?;";
+        List<Pair> friendList = this.jdbcTemplate.query(getFriendListQuery,
+                (rs, rowNum) -> new Pair(
+                        rs.getInt("user2"),
+                        rs.getString("email"),
+                        0
+                )
+                , userId);
 
-        System.out.println(prevMonth);
-        System.out.println(postMonth);
-
+        //친구들 중 noticeBoard에 게시글을 올린 사람을 불러와 평점순으로 내림차순 정렬합니다.
         String getUserRankQuery = "SELECT writer, email ,AVG(score)\n"+
                 "From noticeBoard, user\n" +
                 "where" + prevMonth + "< noticeBoard.createdAt and noticeBoard.createdAt <" + postMonth+ "and noticeBoard.writer = user.id\n" +
@@ -80,12 +88,35 @@ public class FriendDao {
                 "HAVING writer IN(SELECT user2 FROM friend WHERE user1 = ?) \n" +
                 "ORDER BY AVG(score) DESC";
         System.out.println(getUserRankQuery);
-        return this.jdbcTemplate.query(getUserRankQuery,
+        List<GetFriendRankingRes> getFriendRankingResList =  this.jdbcTemplate.query(getUserRankQuery,
                 (rs, rowNum) -> new GetFriendRankingRes(
                         rs.getInt("writer"),
                         rs.getString("email"),
                         rs.getDouble("AVG(score)")
                 ), userId);
+
+        //이제 게시글을 안올렸지만 친구목록에 있는 사람들을 뒤에 붙입니다.
+        for(int i=0; i<getFriendRankingResList.size(); i++)
+        {
+            for(int j=0; j<friendList.size(); j++)
+            {
+                if(getFriendRankingResList.get(i).getFriendIndex() == friendList.get(j).getFirst())
+                {
+                    friendList.get(j).setThird(1);
+                    continue;
+                }
+            }
+        }
+        for(int i=0; i<friendList.size(); i++)
+        {
+            if(friendList.get(i).getThird()==0)
+            {
+                GetFriendRankingRes tempRank = new GetFriendRankingRes(friendList.get(i).getFirst(), friendList.get(i).getSecond(), 0.0);
+                getFriendRankingResList.add(tempRank);
+            }
+        }
+
+        return getFriendRankingResList;
     }
 
     // 해당 userIdx를 갖는 유저조회
