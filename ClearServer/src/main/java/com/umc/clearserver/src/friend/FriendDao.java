@@ -81,19 +81,41 @@ public class FriendDao {
                 , userId);
 
         //친구들 중 noticeBoard에 게시글을 올린 사람을 불러와 평점순으로 내림차순 정렬합니다.
-        String getUserRankQuery = "SELECT writer, email ,AVG(score)\n"+
+        String getUserRankQueryUser1 = "SELECT writer, email ,AVG(score)\n"+
                 "From noticeBoard, user\n" +
                 "where" + prevMonth + "< noticeBoard.createdAt and noticeBoard.createdAt <" + postMonth+ "and noticeBoard.writer = user.id\n" +
                 "group by writer\n" +
                 "HAVING writer IN(SELECT user2 FROM friend WHERE user1 = ?) \n" +
                 "ORDER BY AVG(score) DESC";
-        System.out.println(getUserRankQuery);
-        List<GetFriendRankingRes> getFriendRankingResList =  this.jdbcTemplate.query(getUserRankQuery,
+
+        String getUSerRankQueryUser2 = "SELECT writer, email ,AVG(score)\n"+
+                "From noticeBoard, user\n" +
+                "where" + prevMonth + "< noticeBoard.createdAt and noticeBoard.createdAt <" + postMonth+ "and noticeBoard.writer = user.id\n" +
+                "group by writer\n" +
+                "HAVING writer IN(SELECT user1 FROM friend WHERE user2 = ?) \n" +
+                "ORDER BY AVG(score) DESC";
+
+        List<GetFriendRankingRes> getFriendRankingResList =  this.jdbcTemplate.query(getUserRankQueryUser1,
                 (rs, rowNum) -> new GetFriendRankingRes(
                         rs.getInt("writer"),
                         rs.getString("email"),
                         rs.getDouble("AVG(score)")
                 ), userId);
+
+        //user2를 조회해 user1 친구를 조회한다.
+        List<GetFriendRankingRes> getFriendRankingResListUser2 =  this.jdbcTemplate.query(getUSerRankQueryUser2,
+                (rs, rowNum) -> new GetFriendRankingRes(
+                        rs.getInt("writer"),
+                        rs.getString("email"),
+                        rs.getDouble("AVG(score)")
+                ), userId);
+
+        for(int i=0; i<getFriendRankingResListUser2.size(); i++)
+        {
+            GetFriendRankingRes tempRank = new GetFriendRankingRes(getFriendRankingResListUser2.get(i).getFriendIndex(), getFriendRankingResListUser2.get(i).getFriendEmail(), getFriendRankingResListUser2.get(i).getScore());
+            getFriendRankingResList.add(tempRank);
+        }
+
 
         //이제 게시글을 안올렸지만 친구목록에 있는 사람들을 뒤에 붙입니다.
         for(int i=0; i<getFriendRankingResList.size(); i++)
