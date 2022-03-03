@@ -26,7 +26,7 @@ public class AdminDao {
         String comments = postEvaluateReq.getComments();
         int id = postEvaluateReq.getId();
         System.out.print(score+"/n"+comments+"/n"+id);
-        String modifyEvaluateQuery = "update noticeBoard set score = ? , comments = ? where id = ?"; // 해당 productIdx를 만족하는 Product를 해당 productName으로 변경한다.
+        String modifyEvaluateQuery = "update noticeBoard set score = ? , comments = ?, isWaited = true where id = ?"; // 해당 productIdx를 만족하는 Product를 해당 productName으로 변경한다.
         Object[] modifyEvaluateParams = new Object[]{score, comments, id}; // 주입될 값들(nickname, userIdx) 순
 
         return this.jdbcTemplate.update(modifyEvaluateQuery, modifyEvaluateParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
