@@ -1,5 +1,6 @@
 package com.umc.clearserver.src.admin;
 
+import com.umc.clearserver.src.admin.model.GetUnscoredNoticeBoardRes;
 import com.umc.clearserver.src.admin.model.PostEvaluateReq;
 import com.umc.clearserver.src.admin.model.admin;
 import com.umc.clearserver.src.config.BaseException;
@@ -8,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.umc.clearserver.src.config.BaseResponseStatus.*;
 
@@ -48,6 +51,21 @@ public class AdminController {
             String result = "평점이 수정되었습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 채점안된 유저들 가져오기
+     * [Post] /admin/unchecked
+     */
+    @ResponseBody
+    @PostMapping("/unchecked")
+    public BaseResponse<List<GetUnscoredNoticeBoardRes>> getUnscoredUser() throws BaseException {
+        try{
+            List<GetUnscoredNoticeBoardRes> getUnscoredNoticeBoardRes = adminProvider.getUnscoredUser();
+            return new BaseResponse<>(getUnscoredNoticeBoardRes);
+        } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
