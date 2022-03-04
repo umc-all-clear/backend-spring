@@ -30,4 +30,13 @@ public class NoticeBoardProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public static List<GetUnscoredNoticeBoardRes> getUnchecked(String email) throws BaseException{
+        try{
+            List<GetUnscoredNoticeBoardRes> getUnscoredNoticeBoardResList = noticeBoardDao.getUnchecked(email);
+            return getUnscoredNoticeBoardResList;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
