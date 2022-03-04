@@ -25,7 +25,6 @@ public class AdminService {
         this.adminProvider = adminProvider;
     }
     public void evaluate(PostEvaluateReq postEvaluateReq) throws BaseException {
-
         try {
             int result = adminDao.evaluate(postEvaluateReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
             if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.

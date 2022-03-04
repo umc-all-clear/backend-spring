@@ -67,4 +67,18 @@ public class NoticeBoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 특정 유저의 청소안된 게시물 가져오기
+     * [Post] /noticeboard/unchecked/user=
+     */
+    @PostMapping("/noticeboard/unchecked")
+    public BaseResponse<List<GetUnscoredNoticeBoardRes>> getUnchecked(@RequestParam(required = true) String email){
+        try{
+            List<GetUnscoredNoticeBoardRes> getUnscoredNoticeBoardResList = NoticeBoardProvider.getUnchecked(email);
+            return new BaseResponse<>(getUnscoredNoticeBoardResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

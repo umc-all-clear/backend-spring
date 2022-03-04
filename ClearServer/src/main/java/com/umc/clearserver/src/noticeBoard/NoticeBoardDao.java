@@ -108,4 +108,24 @@ public class NoticeBoardDao {
 
     }
 
+
+    public List<GetUnscoredNoticeBoardRes> getUnchecked(String email){
+        String getUncheckedNoticeQuery ="SELECT user.id, nB.createdAt, user.email, nB.score, nB.contents, nB.comments, nB.beforePic, nB.afterPic, nB.isWaited\n" +
+                "FROM noticeBoard nB, user\n" +
+                "WHERE user.id = nB.writer AND nB.isWaited=0 AND user.email=?;";
+
+        return this.jdbcTemplate.query(getUncheckedNoticeQuery,
+                (rs, rowNum) -> new GetUnscoredNoticeBoardRes(
+                        rs.getInt("id"),
+                        rs.getTimestamp("createdAt"),
+                        rs.getString("email"),
+                        rs.getDouble("score"),
+                        rs.getString("contents"),
+                        rs.getString("comments"),
+                        rs.getString("beforePic"),
+                        rs.getString("afterPic"),
+                        rs.getBoolean("isWaited")
+                ), email);
+    }
+
 }
